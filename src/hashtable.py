@@ -18,21 +18,28 @@ class HashTable:
 
 
     def _hash(self, key):
+        hash = 5381
+        for letter in key:
+            has = (has * 33) + ord(letter)
         '''
         Hash an arbitrary key and return an integer.
 
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
-        return hash(key)
+        return hash
 
 
     def _hash_djb2(self, key):
+        hash = 5381
+        for letter in key:
+            has = (has * 33) + ord(letter)
+        return hash
         '''
         Hash an arbitrary key using DJB2 hash
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        pass
+        # pass
 
 
     def _hash_mod(self, key):
@@ -44,6 +51,13 @@ class HashTable:
 
 
     def insert(self, key, value):
+        if(self.storage[_hash_mod(key)] != None):
+            current = self.storage[_hash_mod(key)]
+            while current.next:
+                current = current.next
+            current.next = LinkedPair(key, value)
+        else:
+            self.storage[_hash_mod(key)] = LinkedPair(key, value)
         '''
         Store the value with the given key.
 
