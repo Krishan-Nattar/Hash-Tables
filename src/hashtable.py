@@ -20,7 +20,7 @@ class HashTable:
     def _hash(self, key):
         hash = 5381
         for letter in key:
-            has = (has * 33) + ord(letter)
+            hash = (hash * 33) + ord(letter)
         '''
         Hash an arbitrary key and return an integer.
 
@@ -32,7 +32,7 @@ class HashTable:
     def _hash_djb2(self, key):
         hash = 5381
         for letter in key:
-            has = (has * 33) + ord(letter)
+            hash = (hash * 33) + ord(letter)
         return hash
         '''
         Hash an arbitrary key using DJB2 hash
@@ -51,13 +51,19 @@ class HashTable:
 
 
     def insert(self, key, value):
-        if(self.storage[_hash_mod(key)] != None):
-            current = self.storage[_hash_mod(key)]
-            while current.next:
-                current = current.next
+        if self.storage[self._hash_mod(key)] != None:
+            current = self.storage[self._hash_mod(key)]
+            while current:
+                if current.key == key:
+                    current.value = value
+                    break
+                if current.next != None:
+                    current = current.next
+                else:
+                    break
             current.next = LinkedPair(key, value)
         else:
-            self.storage[_hash_mod(key)] = LinkedPair(key, value)
+            self.storage[self._hash_mod(key)] = LinkedPair(key, value)
         '''
         Store the value with the given key.
 
@@ -65,11 +71,50 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # pass
 
 
 
     def remove(self, key):
+        # print("@@@@@@@@@@@")
+        if self.storage[self._hash_mod(key)] != None:
+            previous = None
+            current = self.storage[self._hash_mod(key)]
+            next = current.next
+            while True:
+                if current.key == key:
+                    
+                    # If node is in the middle
+                    if previous != None and next != None:
+                        previous.next = next
+                        break
+                    # If Node is first and has one after
+                    if previous == None and next != None:
+                        self.storage[self._hash_mod(key)] = next
+                        break
+                    # If node is first and only Node
+                    if previous == None and next == None:
+                        self.storage[self._hash_mod(key)] = None
+                        break
+                    # If node is Last and has one before
+                    if previous != None and next == None:
+                        previous.next = None
+                        break
+
+                # If we don't see the key and there is another node to check, move temp nodes forward and repeat
+                elif current.next != None:
+                    previous = current
+                    current = current.next
+                    next = current.next
+
+                # Couldn't find anything and no more nodes left
+                else:
+                    print('No such key!')
+                    break
+
+        else:
+            print('No such key')
+
         '''
         Remove the value stored with the given key.
 
@@ -81,6 +126,20 @@ class HashTable:
 
 
     def retrieve(self, key):
+        
+        if self.storage[self._hash_mod(key)] != None:
+            current = self.storage[self._hash_mod(key)]
+            while True:
+                if current.key == key:
+                    return current.value
+                elif current.next != None:
+                    current = current.next
+                else:
+                    return None
+
+        else:
+            return None
+
         '''
         Retrieve the value stored with the given key.
 
