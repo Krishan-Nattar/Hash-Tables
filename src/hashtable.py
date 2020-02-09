@@ -157,7 +157,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        tempstorage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+        for node in tempstorage:
+            if node != None:
+                current = node
+                while current:
+                    self.insert(current.key, current.value)
+                    current = current.next
+        # pass
 
 
 
