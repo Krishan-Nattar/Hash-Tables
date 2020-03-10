@@ -32,14 +32,13 @@ class HashTable:
     def _hash_djb2(self, key):
         hash = 5381
         for letter in key:
-            hash = (hash * 33) + ord(letter)
+            hash = (hash * 32) + ord(letter)
         return hash
         '''
         Hash an arbitrary key using DJB2 hash
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        # pass
 
 
     def _hash_mod(self, key):
@@ -51,6 +50,7 @@ class HashTable:
 
 
     def insert(self, key, value):
+        # hash_mod_value
         if self.storage[self._hash_mod(key)] != None:
             current = self.storage[self._hash_mod(key)]
             while current:
@@ -71,12 +71,11 @@ class HashTable:
 
         Fill this in.
         '''
-        # pass
 
 
 
     def remove(self, key):
-        # print("@@@@@@@@@@@")
+
         if self.storage[self._hash_mod(key)] != None:
             previous = None
             current = self.storage[self._hash_mod(key)]
@@ -122,7 +121,6 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
 
 
     def retrieve(self, key):
@@ -166,8 +164,6 @@ class HashTable:
                 while current:
                     self.insert(current.key, current.value)
                     current = current.next
-        # pass
-
 
 
 if __name__ == "__main__":
